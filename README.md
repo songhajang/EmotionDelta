@@ -39,7 +39,7 @@
 </table>
 
 ## 📝 프로젝트 목표
-**일일 감정 기록**: 사용자가 하루 동안 느낀 감정을 쉽고 빠르게 기록할 수 있도록 합니다.
+**일일 감정 기록**: 사용자가 하루 동안 느낀 감정을 쉽고 빠르게 기록할 수 있도록 합니다. <br>
 **마음 상태 시각화**: 기록된 감정을 차트나 그래프 형태로 시각화하여 나의 감정 패턴을 한눈에 파악하게 합니다.
 
 
@@ -135,11 +135,11 @@ sudo chgrp devgroup test.sh
 > 소유자와 그룹에만 접근 권한을 부여합니다.
 
 ```
-chmod 750 test.sh
+chmod 770 test.sh
 ```
 
 > Owner (user01): rwx → 읽기/쓰기/실행
-> Group (devgroup): r-x → 읽기/실행
+> Group (devgroup): rwx → 읽기/쓰기/실행
 > Others: --- → 접근 불가
 
 #### 5. 디렉토리 접근 권한 조정
@@ -150,7 +150,7 @@ chmod 750 test.sh
 sudo chgrp devgroup /home/user01
 chmod 750 /home/user01
 ```
-
+r_x → 읽기/실행 권한 부여
 
 ---
 
@@ -179,7 +179,7 @@ diff file1.txt file2.txt
 diff -q file1.txt file2.txt
 ```
 
-> 출력: "Files are different" 또는 "Files are identical"
+> 출력: "Files are identical" 또는 "Files are different"
 
 #### 3. 통합(diff unified) 형식
 
@@ -187,7 +187,7 @@ diff -q file1.txt file2.txt
 diff -u file1.txt file2.txt
 ```
 
-> 변경 부분 위/아래 문맥 포함합니다
+> 변경 부분의 위/아래 문맥을 포함합니다
 > Git diff와 유사한 출력 형식
 
 
