@@ -47,29 +47,29 @@
 ## 📁 파일 구조
 ```
 emotion-diff
-├── diaries/                # 일기 원본 텍스트 (날짜별 파일 저장)
+├── diaries/                  # 일기 원본 텍스트 (날짜별 파일 저장)
 │   ├── 2025-09-08.txt
 │   ├── 2025-09-09.txt
 │   └── 2025-09-10.txt
 │
-├── lexicon/                # 감정 분석 사전
-│   ├── positive_ko.txt     # 긍정 단어 리스트
-│   └── negative_ko.txt     # 부정 단어 리스트
+├── lexicon/                  # 감정 분석 사전
+│   ├── positive_ko.txt       # 긍정 단어 리스트
+│   └── negative_ko.txt       # 부정 단어 리스트
 │
 ├── output/
-│   ├── reports/            # 분석 결과물
+│   ├── reports/              # 분석 결과물
 │   │   ├── sentiment_daily.csv   # 날짜별 감정 점수 집계 (CSV)
 │   │   ├── summary_latest.txt    # 최신 일자의 요약 결과
 │   │   └── daily_diff.md         # 전일 ↔ 금일 감정 점수 비교 (diff 스타일 Markdown)
 │   │
-│   └── charts/ (optional)  # 감정 추이 그래프 (gnuplot 사용시 생성)
+│   └── charts/ (optional)    # 감정 추이 그래프 (gnuplot 사용시 생성)
 │       └── sentiment_trend.png
 │
-└── scripts/                # 실행 스크립트 모음
-    ├── write_diary.sh      # 일기 작성 → diaries/YYYY-MM-DD.txt 생성
-    ├── analyze_sentiment.sh# 모든 일기 분석 → sentiment_daily.csv/summary_latest.txt 갱신
-    ├── plot_trend.sh       # CSV 기반 감정 추이 그래프 생성 → charts/sentiment_trend.png
-    └── gen_md_diff.sh      # 전일 ↔ 금일 감정 점수 비교 → daily_diff.md (diff 명령어 활용)
+└── scripts/                  # 실행 스크립트 모음
+    ├── write_diary.sh        # 일기 작성 → diaries/YYYY-MM-DD.txt 생성
+    ├── analyze_sentiment.sh  # 모든 일기 분석 → sentiment_daily.csv/summary_latest.txt 갱신
+    ├── plot_trend.sh         # CSV 기반 감정 추이 그래프 생성 → charts/sentiment_trend.png
+    └── gen_md_diff.sh        # 전일 ↔ 금일 감정 점수 비교 → daily_diff.md (diff 명령어 활용)
 
 ```
 
