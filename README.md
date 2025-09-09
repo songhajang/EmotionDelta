@@ -73,12 +73,27 @@ emotion-diff
 
 ```
 
+## ⚙️ 시스템 아키텍처
 
-### 📑 데이터 포맷
-
-| 컬럼명 | 설명 | 예시 |
-|--------|------|------|
-
+```mermaid
+graph TD
+    A[👤 사용자 일기 작성] --> B[📝 write_diary.sh]
+    B --> C[📄 diaries/YYYY-MM-DD.txt]
+    C --> D[🔍 analyze_sentiment.sh]
+    D --> E[📊 sentiment_daily.csv]
+    E --> F[📈 plot_trend.sh]
+    E --> G[📋 gen_md_diff.sh]
+    F --> H[🖼️ sentiment_trend.png]
+    G --> I[📄 daily_diff.md]
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style D fill:#f3e5f5
+    style F fill:#f3e5f5
+    style G fill:#f3e5f5
+    style H fill:#e8f5e8
+    style I fill:#e8f5e8
+```
 
 ---
 
@@ -210,32 +225,189 @@ diff file1.txt file2.txt > diff_result.txt
 
 ---
 
-## 📷 프로젝트 시연
+## 📋 구현과정
 
-> 
+```bash
+# 필수 패키지 설치
+sudo apt-get update
+
+# diff (일반적으로 기본 설치되어 있음, 그래도 재설치 가능)
+sudo apt install diffutils -y
+
+# gnuplot (그래프 시각화용)
+sudo apt install gnuplot -y
+```
+
+### 💾 데이터 셋
+감정 어휘 사전 준비가 필요합니다.
+```bash
+
+cat > lexicon/positive_ko.txt << EOF
+좋다
+행복
+기쁘다
+여유
+감사
+만족
+EOF
+
+cat > lexicon/negative_ko.txt << EOF
+싫다
+짜증
+화가난다
+우울
+불안
+스트레스
+EOF
+```
+
+### 🔄 자동화 설정
+
+**crontab 등록 예시:**
+```bash
+# crontab -e
+# 매일 22:30 자동 분석
+30 22 * * * cd ~/EmotionDelta && ./scripts/analyze_sentiment.sh && ./scripts/gen_md_diff.sh && ./scripts/plot_trend.sh
+```
+---
+
+## 🚀 실행 과정
+
+### ✍️ 첫 번째 일기 작성
+
+```bash
+# 오늘 날짜로 일기 작성
+./scripts/write_diary.sh
+
+# 특정 날짜로 일기 작성
+./scripts/write_diary.sh --date 2025-09-10
+
+# 표준 입력으로 일기 작성
+echo "오늘은 정말 좋은 하루였다. 친구들과 만나서 즐거웠고 기분이 좋았다." | ./scripts/write_diary.sh --stdin
+```
+
+### 📊 분석 실행
+
+```bash
+# 전체 분석 파이프라인 실행
+./scripts/analyze_sentiment.sh    # 감정 분석
+./scripts/gen_md_diff.sh          # 비교 리포트 생성
+./scripts/plot_trend.sh           # 그래프 생성
+
+# 결과 확인
+ls output/reports/                # CSV 및 마크다운 리포트
+ls output/charts/                 # PNG 그래프
+```
 
 ---
 
-## 👌트러블슈팅 (Troubleshooting)
+## 📊 사용 예시
 
-| 문제 상황 | 원인 | 해결 방법 |
-|-----------|------|-----------|
-| 상황적기 | 원인적기 | 해결방법적기 |
+### 💡 일기 작성 예시
+
+**2025-09-10.txt**
+```
+칼퇴 후 이 좋다 싫다 싫다 싫다
+친구와 만나서 즐거웠지만 일이 스트레스였다
+```
+
+### 📈 분석 결과
+
+**sentiment_daily.csv**
+```csv
+date,pos,neg,net
+2025-09-08,1,1,0
+2025-09-09,1,0,1
+2025-09-10,2,4,-2
+```
+
+**daily_diff.md**
+```markdown
+# 감정 변화 분석 리포트
+
+## 📅 2025-09-10 vs 2025-09-09
+
+| 지표 | 어제 | 오늘 | 변화 |
+|------|------|------|------|
+| 긍정 점수 | 1 | 2 | ↑ +1 |
+| 부정 점수 | 0 | 4 | ↑ +4 |
+| 순 점수 | 1 | -2 | ↓ -3 |
+
+### 💬 분석 코멘트
+부정 감정이 크게 증가하여 순 감정 점수가 하락했습니다.
+```
+
+---
+
+## 🐛 트러블슈팅
+
+<details>
+<summary><strong>📌 일반적인 문제와 해결책</strong></summary>
+
+#### ❌ 문제: 단어 부분 일치로 오탐 발생
+**예시:** '슬프다' 검색 시 '고슬프다'도 카운트
+```bash
+# 해결: grep -w 옵션 사용
+grep -w "슬프다" diary.txt
+```
+
+#### ❌ 문제: 한글 인코딩 깨짐
+```bash
+# 해결: 환경 변수 설정
+export LANG=ko_KR.UTF-8
+export LC_ALL=ko_KR.UTF-8
+```
+
+#### ❌ 문제: gnuplot 명령어 찾을 수 없음
+```bash
+# 해결: 패키지 설치
+sudo apt-get install gnuplot
+```
+
+#### ❌ 문제: 권한 거부 오류
+```bash
+# 해결: 실행 권한 부여
+chmod +x scripts/*.sh
+```
+</details>
 
 ---
 
 ## 📂 회고
 
-- **민경** : 
-- **노운** : 
-- **송하** : 
-- **병길** : 
+### 👤 문민경
+이번 프로젝트를 통해 **표준 입출력과 파이프를 활용한 쉘 스크립트의 강력함**을 체감할 수 있었습니다. 특히, 여러 명령어를 조합하여 복잡한 텍스트 처리 파이프라인을 구축하는 과정이 흥미로웠습니다. 앞으로는 더 복잡한 자동화 시스템도 구축해보고 싶습니다.
+
+### 👤 이노운  
+팀원들과 **Git을 사용하여 협업하며 코드 충돌을 해결하고, 의미 있는 커밋 메시지를 작성하는 습관**의 중요성을 깨달았습니다. 특히 브랜치 전략과 코드 리뷰 과정에서 많은 것을 배웠고, 협업 개발의 진정한 가치를 이해할 수 있었습니다.
+
+### 👤 장송하
+초기에는 텍스트 분석 로직을 어떻게 구현할지 막막했지만, **grep과 같은 기본 도구의 다양한 옵션을 깊이 있게 학습하며 문제를 해결**할 수 있었습니다. 단순해 보이는 유닉스 명령어들도 조합하면 놀라운 일들을 할 수 있다는 것을 깨달았습니다.
+
+### 👤 황병길
+**gnuplot이라는 새로운 시각화 도구를 사용해 보는 경험**이 신선했습니다. 데이터를 효과적으로 시각화하는 것의 중요성과 스크립트를 통해 이를 자동화하는 방법을 배울 수 있었습니다. 앞으로는 더 다양한 시각화 라이브러리도 경험해보고 싶습니다.
 
 ---
 
 
-<br>
+## 🚀 향후 확장 계획
 
+### 🌐 Phase 1: 웹 인터페이스 도입
+- React/Vue.js 기반 웹 UI 개발
+- 실시간 차트 및 인터랙티브 대시보드
+- 모바일 반응형 디자인
 
-## 향후 확장 가능성
-- 
+### 🧠 Phase 2: 고도화된 감정 분석
+- **자연어 처리(NLP) 모델** 도입
+- 다차원 감정 분류 (기쁨, 슬픔, 분노, 두려움 등)
+- **BERT 기반 한국어 감정 분석** 엔진
+
+### 🌍 Phase 3: 다국어 지원
+- 영어, 일본어, 중국어 감정 사전 확장
+- 자동 언어 감지 기능
+- 다국어 리포트 생성
+
+### ☁️ Phase 4: 클라우드 통합
+- AWS/Google Cloud 연동
+- 자동 백업 및 동기화
+- RESTful API 제공
