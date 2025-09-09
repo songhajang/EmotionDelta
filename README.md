@@ -150,8 +150,8 @@ chmod 770 test.sh
 sudo chgrp devgroup /home/user01
 chmod 750 /home/user01
 ```
-r_x → 읽기/실행 권한 부여
-
+> r_x → 읽기/실행 권한 부여
+<br>
 ---
 
 ### 📌 diff란?
