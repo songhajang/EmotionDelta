@@ -188,7 +188,7 @@ diff file1.txt file2.txt
 
 > 두 파일의 차이점 전체를 줄 단위로 보여줍니다
 
-#### 2. 간단 비교 (다른지 여부만 확인)
+#### 2. 간략 비교 (다른지 여부만 확인)
 
 ```bash
 diff -q file1.txt file2.txt
