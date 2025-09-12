@@ -342,7 +342,7 @@ date,pos,neg,net
 ## 🐛 트러블슈팅
 
 <details>
-<summary><strong>📌 일반적인 문제와 해결책</strong></summary>
+<summary><strong>📌 문제와 해결책</strong></summary>
 
 #### ❌ 문제: 단어 부분 일치로 오탐 발생
 **예시:** '슬프다' 검색 시 '고슬프다'도 카운트
